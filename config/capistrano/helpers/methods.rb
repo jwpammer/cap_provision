@@ -24,7 +24,7 @@ def get_deploy_config_value(property_path, default_value = nil)
   
   property_parts = property_path.split('/')
 
-  to_eval = "deploy_config[os_type]"
+  to_eval = "deploy_config"
   
   property_parts.each do |property_part|
     to_eval << "['#{property_part}']"
@@ -135,11 +135,6 @@ def set_with_prompt_default(property, prompt = nil, default = nil)
   return value
 end
 
-def prompt_and_set_os_type
-  os_type = set_with_prompt_default('os_type', 'OS type (ubuntu/rhel)', 'ubuntu')
-  set :os_type, os_type
-end
-
 def prompt_and_set_server_targets(roles = [:server], options = { primary: true, no_release: true })
   server_targets = set_with_prompt_default(:server_target, 'Server target - IP address or hostname (comma separated list for multiple)')
   roles << options
@@ -162,7 +157,6 @@ def prompt_and_set_server_port
 end
 
 def prompt_for_common_context(roles = [:server], options = { primary: true, no_release: true })
-  prompt_and_set_os_type
   prompt_and_set_server_targets(roles, options)
   prompt_and_set_ssh_key_files
   prompt_and_set_server_port  
@@ -174,16 +168,12 @@ def put_template(from, to)
   put ERB.new(erb).result(binding), to
 end  
 
-def upload_support_file(component, path, file, use_sudo = false, os_dependent = false)
+def upload_support_file(component, path, file, use_sudo = false)
   path = path.gsub(/^\//, '')
   tmp_dirs = create_tmp_dir_structure(component)  
   run "mkdir -p #{tmp_dirs[:support]}/#{path}"
-  
-  if os_dependent    
-    upload "#{support_files_dir}/#{component}/#{os_type}/#{path}/#{file}", "#{tmp_dirs[:support]}/#{path}", { via: :scp } 
-  else
-    upload "#{support_files_dir}/#{component}/#{path}/#{file}", "#{tmp_dirs[:support]}/#{path}", { via: :scp } 
-  end
+   
+  upload "#{support_files_dir}/#{component}/#{path}/#{file}", "#{tmp_dirs[:support]}/#{path}", { via: :scp } 
   
   mkdir_cmd = "mkdir -p /#{path}"
   cp_cmd = "cp -rf #{tmp_dirs[:support]}/#{path}/#{file} /#{path}/#{file}"  
@@ -197,17 +187,13 @@ def upload_support_file(component, path, file, use_sudo = false, os_dependent = 
   end
 end
 
-def upload_support_dir(component, path, dir, use_sudo = false, os_dependent = false)
+def upload_support_dir(component, path, dir, use_sudo = false)
   path = path.gsub(/^\//, '')
   tmp_dirs = create_tmp_dir_structure(component)
   run "mkdir -p #{tmp_dirs[:support]}/#{path}"
   
-  if os_dependent
-    upload "#{support_files_dir}/#{component}/#{os_type}/#{path}/#{dir}", "#{tmp_dirs[:support]}/#{path}", { via: :scp, recursive: true } 
-  else
-    upload "#{support_files_dir}/#{component}/#{path}/#{dir}", "#{tmp_dirs[:support]}/#{path}", { via: :scp, recursive: true } 
-  end
-  
+  upload "#{support_files_dir}/#{component}/#{path}/#{dir}", "#{tmp_dirs[:support]}/#{path}", { via: :scp, recursive: true } 
+
   mkdir_cmd = "mkdir -p /#{path}"
   cp_cmd = "cp -rf #{tmp_dirs[:support]}/#{path}/#{dir} /#{path}"
   
@@ -220,16 +206,12 @@ def upload_support_dir(component, path, dir, use_sudo = false, os_dependent = fa
   end
 end
 
-def upload_template_file(component, path, template, to_file, use_sudo = false, os_dependent = false)
+def upload_template_file(component, path, template, to_file, use_sudo = false)
   path = path.gsub(/^\//, '')
   tmp_dirs = create_tmp_dir_structure(component)
   run "mkdir -p #{tmp_dirs[:templates]}/#{path}"
-  
-  if os_dependent
-    put_template("#{template_files_dir}/#{component}/#{os_type}/#{path}/#{template}.erb", "#{tmp_dirs[:templates]}/#{path}/#{to_file}")
-  else
-    put_template("#{template_files_dir}/#{component}/#{path}/#{template}.erb", "#{tmp_dirs[:templates]}/#{path}/#{to_file}")
-  end
+
+  put_template("#{template_files_dir}/#{component}/#{path}/#{template}.erb", "#{tmp_dirs[:templates]}/#{path}/#{to_file}")
 
   mkdir_cmd = "mkdir -p /#{path}"
   cp_cmd = "cp -f #{tmp_dirs[:templates]}/#{path}/#{to_file} /#{path}/#{to_file}"
