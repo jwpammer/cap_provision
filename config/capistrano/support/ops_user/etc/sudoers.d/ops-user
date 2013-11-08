@@ -1,0 +1,4 @@
+# User rules for ops (intended to be temporary and used just for install/setup of server)
+ops ALL=(ALL) NOPASSWD:ALL
+
+# Leave a newline under here otherwise the file might fail to load!

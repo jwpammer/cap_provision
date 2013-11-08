@@ -1,0 +1,44 @@
+common: &common
+  debug:
+    command_log: true
+      
+  application:
+    name: cap_provision
+    repository: git@github.com:jwpammer/cap_provision.git
+    ops_home_dir: /home/ops
+    app_root_dir: /home/ops/app
+    app_tmp_dir: /tmp/app
+
+  nginx:
+    defaults:
+      ssl_enabled: N
+      http_port: 80
+      https_port: 443
+      nginx_ssl_crt_file: server_target.crt
+      nginx_ssl_key_file: server_target.key
+
+  ruby:
+    version: 2.0.0-p247 
+  
+  postgresql:
+    password: '1234'
+    
+  task_exclusions:
+    - none
+      
+ubuntu:
+  <<: *common
+  server_target:
+    pro_user: vagrant
+    pro_home_dir: /home/vagrant
+    ssh_key_files: 'server_target_rsa,vagrant_rsa'
+    timezone: America/Chicago
+    service_path: /usr/sbin/service
+
+rhel:
+  <<: *common
+  server_target:
+    pro_user: root
+    ssh_key_files: 'server_target_rsa,vagrant_rsa'
+    timezone: America/Chicago
+    service_path: /sbin/service      
