@@ -22,6 +22,7 @@ common: &common
   
   postgresql:
     password: '1234'
+    version: '9.1'
     
   task_exclusions:
     - none

@@ -75,11 +75,5 @@ namespace :nginx do
     end
     
   end
-  
-  def change_permission(file_path) 
-    run "#{sudo} chown -R ops #{file_path}"
-    run "#{sudo} chgrp -R ops #{file_path}"
-    run "#{sudo} chmod 700 #{file_path}"
-  end
     
 end
