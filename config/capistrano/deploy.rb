@@ -69,9 +69,15 @@ end
 namespace :db do
   
   task :prompt_for_context do
-    prompt_for_common_context
+    prompt_for_common_context([:db], { primary: true, no_release: false })
   end
-    
+
+  task :assign_config_vars do
+    assign_common_config_vars
+    set :user, 'ops'
+  end
+  after 'db:prompt_for_context', 'db:assign_config_vars'    
+  
   task :init, roles: :db do
     run "cd #{current_path} && RAILS_ENV=production bundle exec rake db:drop db:create db:migrate db:seed"
   end
@@ -92,8 +98,14 @@ end
 namespace :app do
   
   task :prompt_for_context do
-    prompt_for_common_context
+    prompt_for_common_context([:app], { primary: true, no_release: false })
   end
+
+  task :assign_config_vars do
+    assign_common_config_vars
+    set :user, 'ops'
+  end
+  after 'app:prompt_for_context', 'app:assign_config_vars'  
   
   task :unicorn_refresh do
     unicorn.reload
@@ -104,8 +116,7 @@ namespace :app do
 end
 
 namespace :deploy do
-  
-  # Additional Setup tasks  
+
   task :prompt_for_context do
     prompt_for_common_context([:web, :app, :db], { primary: true, no_release: false })
   end
