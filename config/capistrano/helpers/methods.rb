@@ -95,6 +95,7 @@ def upload_sudoers(component, template, to_file)
   upload_template_file(component, 'etc/sudoers.d', template, to_file, true)
   run "#{sudo} chmod 440 /etc/sudoers.d/#{to_file}"
 end
+
 def close_sessions
   sessions.values.each { |session| session.close }
   sessions.clear
@@ -148,17 +149,17 @@ def prompt_and_set_server_targets(roles = [:server], options = { primary: true, 
   end
 end
 
+def prompt_and_set_server_port
+  ssh_port = set_with_prompt_default('ssh_port', 'SSH port to connect to remote target', 22)
+  set :port, ssh_port
+end
+
 def prompt_and_set_ssh_key_files
   ssh_options[:keys] = []
   ssh_key_files = set_with_prompt_default(:ssh_key_file, 'SSH key file name, relative to config/capistrano/ssh_keys, comma separated for multiple', get_deploy_config_value('server_target/ssh_key_files'))
   ssh_key_files.split(',').each do |ssh_key_file|
     ssh_options[:keys] << File.join(File.expand_path(ssh_keys_dir, __FILE__), ssh_key_file)
   end
-end
-
-def prompt_and_set_server_port
-  ssh_port = set_with_prompt_default('ssh_port', 'SSH port to connect to remote target', 22)
-  set :port, ssh_port
 end
 
 def prompt_for_common_context(roles = [:server], options = { primary: true, no_release: true })
