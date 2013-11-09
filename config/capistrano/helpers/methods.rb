@@ -132,6 +132,7 @@ def set_with_prompt_default(property, prompt = nil, default = nil)
   prompt = property.to_s if prompt.nil?
   value = prompt_with_default(prompt, default) if value.nil? || value.to_s.empty?
   set property.to_sym, value
+  puts "To skip prompt, execute command: export #{property.to_s.upcase}=#{value}"
   puts "#{property}=#{value}"
   return value
 end
