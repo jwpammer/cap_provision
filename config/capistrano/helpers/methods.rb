@@ -95,6 +95,7 @@ def upload_sudoers(component, template, to_file)
   upload_template_file(component, 'etc/sudoers.d', template, to_file, true)
   run "#{sudo} chmod 440 /etc/sudoers.d/#{to_file}"
 end
+
 def close_sessions
   sessions.values.each { |session| session.close }
   sessions.clear
