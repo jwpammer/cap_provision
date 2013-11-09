@@ -164,8 +164,8 @@ end
 def prompt_for_common_context(roles = [:server], options = { primary: true, no_release: true })
   prompt_and_set_os_type
   prompt_and_set_server_targets(roles, options)
-  prompt_and_set_ssh_key_files
   prompt_and_set_server_port  
+  prompt_and_set_ssh_key_files
 end
 
 # Upload helpers
@@ -242,6 +242,20 @@ def upload_template_file(component, path, template, to_file, use_sudo = false, o
     run "#{cp_cmd}"  
   end  
 end  
+
+def upload_ssh_key
+  set :command_log, get_deploy_config_value('debug/command_log')
+    
+  to_user = prompt_with_default('User to upload SSH public key to', 'root')
+  to_home_dir = prompt_with_default('User home directory', '/root')
+  
+  set :user, to_user
+  
+  upload "#{ssh_keys_dir}/server_target_rsa.pub", "#{to_home_dir}/.ssh/authorized_keys", { via: :scp } 
+  run "#{sudo} chown -R #{to_user}:#{to_user} #{to_home_dir}/.ssh"
+  run "chmod 700 #{to_home_dir}/.ssh"
+  run "chmod 600 #{to_home_dir}/.ssh/authorized_keys"
+end
 
 # User helpers
 def ch_ops(file_path, chmod = '700') 
