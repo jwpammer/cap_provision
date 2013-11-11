@@ -3,7 +3,8 @@
 ## Server Provisioning
 Capistrano scripts have been developed to provision a bare bones server. The steps below are for provisining a Rackspace Ubuntu 13.10 server with a Nginx/Unicorn/RVM/Postgresql stack. A different VPS or OS version could be supported with minimal effort. 
 
-A note regarding script prompting... The scripts will prompt for information as required. In almost all cases, the following will be prompted for at the beginning of each script execution:
+### A note regarding script prompting...
+The scripts will prompt for information as required. In almost all cases, the following will be prompted for at the beginning of each script execution:
 
 * `Server Target` - One or more IP addresses or hostnames of the servers to target or connect to.
 * `SSH Port` - The SSH port to connect to, 22 is the default.
@@ -15,8 +16,17 @@ Any prompt can be silenced by exporting the appropriate variable before executin
 
 The script will now use that variable rather than prompting for the value. The name of the variable to set will be shown each time the user is prompted for something. Simply use the syntax provided to turn off prompting for other variables as desired.
 
-Now onto provisioning...
+### A note regarding deployment configuration...
+The script execution may be configured in a number of ways. Configuration parameters may be found at:
 
+```
+config/capistrano/deploy.yml
+```
+
+The parameters are pretty straight-forward. Simply modify the values as necessary.
+
+
+### Now onto provisioning...
 To get started head over to [Rackspace Cloud](http://www.rackspace.com/cloud/) and spin up a new Ubuntu 13.10 instance. Record the following information:
 
 	<password>
