@@ -7,6 +7,7 @@ load 'config/capistrano/helpers/tasks'
 
 # Import project recipes
 load 'config/capistrano/recipes/base'
+load 'config/capistrano/recipes/memcached'
 load 'config/capistrano/recipes/nginx'
 load 'config/capistrano/recipes/ops_user'
 load 'config/capistrano/recipes/postgresql'
@@ -51,6 +52,7 @@ namespace :provision do
     base.install  
     ops_user.install
     rvm.install
+    memcached.install    
     postgresql.install
     nginx.install
   end
@@ -59,6 +61,7 @@ namespace :provision do
   task :setup do
     ops_user.setup
     rvm.setup
+    memcached.setup    
     postgresql.setup
     nginx.setup
     unicorn.setup       

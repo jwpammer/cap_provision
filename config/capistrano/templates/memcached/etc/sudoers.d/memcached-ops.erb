@@ -1,0 +1,4 @@
+# Memcached ops sudo
+%ops ALL = NOPASSWD: <%= service_path %> memcached *
+
+# Leave a newline under here otherwise the file might fail to load!

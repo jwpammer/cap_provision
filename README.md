@@ -1,7 +1,7 @@
 # CapProvision
 
 ## Server Provisioning
-Capistrano scripts have been developed to provision a bare bones server. The steps below are for provisining a Rackspace Ubuntu 13.10 server with a Nginx/Unicorn/RVM/Postgresql stack. A different VPS or OS version could be supported with minimal effort. 
+Capistrano scripts have been developed to provision a bare bones server. The steps below are for provisining a Rackspace Ubuntu 13.10 server with a Nginx/Unicorn/RVM/Postgresql/Memcached stack. A different VPS or OS version could be supported with minimal effort. 
 
 ### A note regarding script prompting...
 The scripts will prompt for information as required. In almost all cases, the following will be prompted for at the beginning of each script execution:
