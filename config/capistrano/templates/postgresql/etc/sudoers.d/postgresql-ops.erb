@@ -1,0 +1,4 @@
+# Postgresql ops sudo
+%ops ALL = NOPASSWD: <%= service_path %> postgresql *
+
+# Leave a newline under here otherwise the file might fail to load!

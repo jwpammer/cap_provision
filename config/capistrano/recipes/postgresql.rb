@@ -15,6 +15,8 @@ namespace :postgresql do
         
     run "#{sudo} -u postgres psql -U postgres -d postgres -c \"CREATE USER ops WITH PASSWORD '#{password}';\""
     run "#{sudo} -u postgres psql -U postgres -d postgres -c \"ALTER USER ops CREATEDB;\""
+    
+    upload_sudoers('postgresql', 'postgresql-ops', 'postgresql-ops')
   end
 
   namespace :ubuntu do

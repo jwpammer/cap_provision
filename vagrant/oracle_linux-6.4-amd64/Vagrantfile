@@ -29,11 +29,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Bridged networks make the machine appear as another physical device on
   # your network.
   # config.vm.network :public_network
-  config.vm.network :forwarded_port, guest: 22, host: 2202
-  config.vm.network :forwarded_port, guest: 8777, host: 18777
-  config.vm.network :forwarded_port, guest: 8477, host: 18477
-  config.vm.network :forwarded_port, guest: 80, host: 11180
-  config.vm.network :forwarded_port, guest: 443, host: 11443
+  config.vm.network :forwarded_port, guest: 22, host: 9222
+  config.vm.network :forwarded_port, guest: 80, host: 9980
+  config.vm.network :forwarded_port, guest: 443, host: 9443
 
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
