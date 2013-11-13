@@ -80,3 +80,6 @@ On going deployments will be performed in a similar manner, with one potential d
 And if additional data seeding is required, use:
 	
 	cap db:seed
+
+## Server Operations
+See the Wiki: [Server Operations](https://github.com/jwpammer/cap_provision/wiki/Server-Operations)	
